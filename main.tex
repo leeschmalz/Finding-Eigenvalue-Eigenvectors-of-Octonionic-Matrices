@@ -1,0 +1,375 @@
+\documentclass{article}
+
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.75in}
+
+\usepackage{indentfirst}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{titling}
+\renewcommand\maketitlehooka{\null\mbox{}\vfill}
+\renewcommand\maketitlehookd{\vfill\null}
+\graphicspath{ {./images/} }
+
+\usepackage{amsthm}
+\theoremstyle{plain}
+\newtheorem*{theorem*}{Theorem}
+
+\usepackage{multicol}
+\setlength{\columnsep}{1cm}
+
+\title{Finding Eigenvalues and Eigenvectors of Octonionic Matrices}
+\author{Lee Schmalz }
+\date{April 2020}
+
+\begin{document}
+
+\begin{titlingpage}
+\maketitle
+\end{titlingpage}
+
+%-------------------SECTION 1---------------------
+\section{Abstract}
+The process of finding eigenvalues and eigenvectors of a matrix is a foundation of the field of linear algebra as it is perhaps the most descriptive tool in the illumination of properties of a linear transformations. In general, we typically think of these linear transformations in the set of real numbers or, a bit less commonly, in the complex plane. In this study, we will examine linear transformations between sets of much higher dimensional entities using these properties. To mention a nowhere near exhaustive list, these higher dimensional sets of numbers have been of great use in fields such as computer graphics, robotics, and many areas of theoretical physics. Perhaps a construction of quaternionic and octonionic matrices such that eigenvalues and eigenvectors can be discovered could reveal properties of linear transformations of higher dimensional number systems that have use in their respective applications.
+%-----------------------SECTION 2-----------------------
+\section{Introduction}
+In this exploration, we will begin with a simple construction of the complex numbers from the real numbers, known as the \emph{Cayley-Dickson process}. This process will then be extrapolated further to continue building higher dimensional number systems, known as the quaternions and the octonions. From here, we will define properties of each of these number systems that will be crucial for our constructions as they relate to the eigenvector/eigenvalue problems. After this foundation has been achieved, we will begin exploring eigenvector/eigenvalue problems of real and complex numbers, allowing us to recognize patterns that might eventually lead to quaternionic and octonionic solutions.
+%-----------------------SECTION 3-----------------------
+\section{Multi-Dimensional Numbers}
+The Cayley-Dickson process is a process in which a 2n-dimensional algebra is constructed from an n-dimensional algebra. To begin the exploration of octonionic matrices, we will first explore how these multi-dimensional numbers are built from sets of real numbers through multiple iterations of the Cayley-Dickson process. 
+
+We think of the real number line as a continuous set of all quantities; including integers, rational numbers, and irrational numbers. We denote this set, $\mathbb{R}$. This set of real numbers is a set of one-dimensional numbers, as each number encodes a single distance from 0 along a single axis. The real numbers are sufficient to represent a large subset of problems in mathematics; though, we will soon observe problems in which complex (or 2-dimensional) solutions arise. Consider the equality $x^2+1=0$. If we are thinking within the narrow, one-dimensional scope of the \emph{real numbers}, we will quickly find this equality has no solution. That is, there does not exist a real number, $x$, that satisfies the equality, $x^2+1=0$. However, if we define a complex number, $i$, such that $i=\sqrt{-1}$, we have introduced a value that is not represented on the real number line, but presents a solution to this equation. Further, any real multiple of this complex number, $i$, is not represented on the real number line. In other words, we have introduced a set of numbers, $\{ai \hspace{2mm} |\hspace{2mm} a \in \mathbb{R}\}$, that intersects the real numbers only at the origin, where $0=0i$. This can be visually represented as perpendicular axes containing a \emph{real} direction and a \emph{complex} direction, where the set of all combinations of these two dimensions form the \emph{complex plane}, formally denoted $\{a+bi\hspace{2 mm}|\hspace{2 mm} a,b \in \mathbb{R} \land i=\sqrt{-1}\}$. So, we have constructed a 2-dimensional (complex) set of numbers from the 1-dimensional (real) numbers.
+
+Extending the Cayley-Dickson process, we can imagine using this set of complex numbers (n=2) as a building block to further construct a 4-dimensional (2n=4) set of numbers. Here, we will denote the foundation of real numbers, $q_i$, that make up complex numbers, $a$ and $b$. Let us introduce a third direction, that is perpendicular to both the real axis and the complex axis as previously defined, to create a number $a+bj$, where $j=\sqrt{-1}$. Breaking down this representation into its foundation of real number multiples of each defined dimension, we have:
+\begin{align*} 
+a+bj &= (q_1+q_2i)+(q_3+q_4i)j \\
+&= q_1+q_2i+q_3j+q_4ij
+\end{align*}
+Here, we have arrived at a number that is defined by some quantity of each of the real direction ($q_1$), the $i$ direction ($q_2$), the $j$ direction ($q_3$), and the $ij$ direction ($q_4$). We will call this $ij$ direction the $k$ direction to complete our conception of the set of the \emph{quaternions}, defined 
+$$\{q_1+q_2i+q_3j+q_4k\hspace{2 mm}|\hspace{2 mm} q_1,q_2,q_3,q_4 \in \mathbb{R} \land ijk=i^2=j^2=k^2=\sqrt{-1}\}$$
+As may be apparent by now, this Cayley-Dickson process can be further extended, building a higher 2n-dimensional algebra out of each subsequent n-dimensional algebra. Let us define the octonions (8-dimensional algebra) from the quaternions in the same way. For sake of simplicity, a multiplication diagram can be introduced to name each of the 4 discovered dimensions ($l,il,jl,kl$) and properly define the multiplications between them.
+
+$$\includegraphics{OctonionicMultiplication}$$
+To interpret this diagram, observe that all sets of three points connected by a straight line and including the perimeter of the center circle ($i,j,k$), are each a quaternionic sub-algebra of the octonionic algebra. Further, multiplication with the direction of the arrow indicates a positive result while multiplication against the direction of the arrow indicates a negative result. For example, $ij=k$ and $ji = -k$. These multiplications will become familiar as we explore properties through examples.
+
+
+%---------------------SECTION 4-----------------------
+\section{Multiplicative Properties}
+It is important to note that the resulting 2n-dimensional algebra of the Cayley-Dickson process does not inherit all of the properties of its respective n-dimensional algebra. For our purposes, the properties that will be most important to consider are commutativity and associativity. In order to consider properties of these multi-dimensional algebras, let the commutativity and associativity of the reals be given. Now, consider the complex multiplication:
+$$(a+bi)(c+di) = ac-bd+(cb+ad)i = ca-db+(da+cb)i=(c+di)(a+bi)$$
+We observe the commutativity of the complex numbers from the commutativity of the reals. Though when we consider higher dimensional numbers such as the quaternions and the octonions, we see that commutativity breaks down. For example, observe the quaternionic multiplication:
+$$(1+2i)(3+4j) = 3+6i+4j+8k \neq 3+4j+6i-8k = (3+4j)(1+2i)$$
+Similarly, if we consider an octonionic example:
+$$(1+i)(k+l) = k+l+ik+il = k+l-j+il \neq k+l+j-il = k+l+ki+li = (k+l)(1+i)$$
+It is shown that an iteration of the Cayley-Dickson process taking the complex numbers to the quaternionic numbers results in a loss of commutativity. Similarly, an iteration of the Cayley-Dickson process taking the quaternionic numbers to the octonionic numbers results in a loss of associativity. Shown:
+
+$$((i+j+l)*(i+2j+l))*(i+j+2l) = (-3+k+il+jl)*(i+j+2l) = 
+-6i-4j-5l+2kl \neq$$
+$$2i-2j-9l-kl = (i+j+l)*(-3-k+2il+4jl) = (i+j+l)*((i+2j+l)*(i+j+2l))$$
+We observe each iteration of the Cayley-Dickson process, thus far, has resulted in the loss of a key property. In summary, from the real numbers to the complex numbers we lose ordering. For example, $1+2i<2+1i$, has no meaning. From the complex numbers to the quaternionic numbers we lose commutativity, as shown; and from the quaternionic numbers to the octonionic numbers we lose associativity as shown. Beyond the scope of our octonionic eigenvalue/eigenvector problem, the Cayley-Dickson process from the octonionic numbers to the sedenionic numbers (a 16-dimensional algebra) results in a non-division algebra, that is, an algebra that lacks the property of having no zero-divisors.
+
+As we extrapolate these number systems to the eigenvector/eigenvalue problem at hand, it will be important to understand what these multiplications represent geometrically as vectors in multi-dimensional spaces. Let us introduce Euler's Formula: $$e^{i\theta}=\cos(\theta)+i\sin(\theta)$$ 
+Here, we see multiplication by the complex number, $e^{i\theta}$, as a rotation transformation of a vector in the complex plane by a degree of $\theta$. Consider the complex number transformation: 
+$$(1+i)*e^{i\frac{\pi}{2}} = (1+i)*(\cos(\frac{\pi}{2})+i\sin(\frac{\pi}{2})) = (1+i)*i = -1 + i$$
+
+This can be visualized as a $\frac{\pi}{2}$-radian vector rotation of the complex number $1+i$. We will refer to this type of multiplication as multiplication by a \emp{phase}.
+
+$$
+\begin{array}{ccc}
+\includegraphics[width=5cm, height=5cm]{vec1}
+& & 
+\includegraphics[width=5cm, height=5cm]{vec2}
+\end{array}$$
+
+Further, it is shown that successive phase multiplications results in successive rotations:
+$$e^{i\theta}e^{i\phi}=e^{i(\theta+\phi)}$$
+%-----------------------SECTION 5-----------------------
+\section{Eigenvectors and Eigenvalues of Real and Complex Matrices}
+To begin our exploration of eigenvectors and eigenvalues of square matrices with multi-dimensional entries, we will begin by considering a 2x2 real-valued matrix followed by a 2x2 complex-valued matrix. A vector can be uniquely defined by its direction and its magnitude. Intuitively, an eigenvector of a square matrix is a vector that spans an unchanged direction when multiplied, or transformed, by the matrix. The corresponding eigenvalue of each eigenvector is the factor by which the magnitude of the eigenvector is scaled under the matrix transformation. This idea is represented formally as a solution to $M\vec{v}=\vec{v}\lambda$, where $M$ is the transformation matrix, $\vec{v}$ is the eigenvector, and $\lambda$ is the corresponding eigenvalue. Consider the matrix: 
+$$
+\begin{bmatrix}
+-5 & 6\\
+-9 & 10
+\end{bmatrix}\vec{v}=\vec{v}\lambda
+$$
+We can find eigenvalues by solving the following, where $I$ is the identity matrix:
+$$det(M-\lambda I) = 0$$
+$$det\begin{bmatrix}
+-5-\lambda & 6\\
+-9 & 10-\lambda
+\end{bmatrix}=(10-\lambda)(-5-\lambda)+54=\lambda^2+5\lambda+4=(\lambda-4)(\lambda-1)=0$$
+We arrive at eigenvalues $\lambda_1 = 4$ and $\lambda_2=1$. Solving for eigenvectors, $\vec{v}$:
+\begin{align*}
+&\begin{bmatrix}-5 & 6\\-9 & 10\end{bmatrix}\vec{v}_1             = 4 \vec{v}_1 & \hspace{1mm} &\begin{bmatrix}-5 & 6\\-9 & 10\end{bmatrix} \vec{v}_2            = 1\vec{v}_2 \\
+&\begin{bmatrix}-5 & 6\\-9 & 10\end{bmatrix}\vec{v}_1-4 \vec{v}_1 = 0           & \hspace{1mm} &\begin{bmatrix}-5 & 6\\-9 & 10\end{bmatrix} \vec{v}_2-1\vec{v}_2 = 0 \\
+&\begin{bmatrix}-9 & 6\\-9 & 6\end{bmatrix}\vec{v}_1              = 0           & \hspace{1mm} &\begin{bmatrix}-6 & 6\\-9 & 9\end{bmatrix} \vec{v}_2 = 0 \\
+& \hspace{6mm} \vec{v}_1            =\begin{bmatrix}1\\1\end{bmatrix}           & \hspace{1mm} &\hspace{6mm} \vec{v}_2    =\begin{bmatrix}2\\3\end{bmatrix} 
+\end{align*}
+Similarly, we will consider a complex example:
+$$\begin{bmatrix}1 & 1+i\\1-i & 2\end{bmatrix}\vec{v}=\vec{v}\lambda$$
+
+$$det\begin{bmatrix}1-\lambda & 1+i\\1-i & 2-\lambda\end{bmatrix}=(1-\lambda)(2-\lambda)-(1+i)(1-i)=\lambda^2-3\lambda+2-2=\lambda^2-3\lambda=\lambda(\lambda-3)=0$$
+We arrive at eigenvalues $\lambda_1 = 3$ and $\lambda_2=0$. Solving for eigenvectors, $\vec{v}$:
+
+\begin{align*}
+&\begin{bmatrix}1 & 1+i\\1-i & 2\end{bmatrix}\vec{v}_1             = 3 \vec{v}_1 & \hspace{1mm} &\begin{bmatrix}1 & 1+i\\1-i & 2\end{bmatrix} \vec{v}_2=1\vec{v}_2 \\
+&\begin{bmatrix}1 & 1+i\\1-i & 2\end{bmatrix}\vec{v}_1-3\vec{v}_1 = 0           & \hspace{1mm} &\begin{bmatrix}1 & 1+i\\1-i & 2\end{bmatrix}         \vec{v}_2-0\vec{v}_2=0\\
+&\begin{bmatrix}-2 & 1+i\\1-i & -1\end{bmatrix}\vec{v}_1          = 0           & \hspace{1mm} &\begin{bmatrix}1 & 1+i\\1-i & 2\end{bmatrix} \vec{v}_2 = 0 \\
+&\begin{bmatrix}-2 & 1+i\\0 & 0\end{bmatrix}\vec{v}_1          = 0              & \hspace{1mm} &\begin{bmatrix}1 & 1+i\\0 & 0\end{bmatrix} \vec{v}_2 = 0 \\
+& \hspace{6mm} \vec{v}_1            =\begin{bmatrix}-1-i\\1\end{bmatrix}           & \hspace{1mm} &\hspace{6mm} \vec{v}_2    =\begin{bmatrix}1+i\\2\end{bmatrix} 
+\end{align*}
+Above are examples of the process of discovering eigenvalues and eigenvectors for real and complex matrices; that is, solutions to  $M\vec{v}=\vec{v}\lambda$. Recall the property of commutativity exhibited by real and complex multiplications, as previously shown. In these real and complex cases, eigenvalue and eigenvector solutions to equations $M\vec{v}=\vec{v}\lambda$ and $M\vec{v}=\lambda\vec{v}$ are equivalent ($\vec{v}\lambda=\lambda\vec{v}$). Though, consider the process in which the matrix, $M$, contains higher dimensional entries, such as quaternions or octonions. We are now considering a case where eigenvalue and eigenvector solutions to these equations are not necessarily equal, as we have shown that multiplication of these higher dimensional numbers does not necessarily exhibit commutativity as in the real and complex examples. Consequently, we define eigenvalue and eigenvector solutions to $M\vec{v}=\vec{v}\lambda$ and $M\vec{v}=\lambda\vec{v}$ as \emph{right} and \emph{left eigenvalues} and \emph{eigenvectors}, respectively. For our purposes, as we approach the octonionic eigenvalue/eigenvector problem, we will be interested only in the right eigenvalues and eigenvectors. From this, we also observe that any \emph{phase} rotation of this solution will also lead to a complex eigenvector/eigenvalue solution. Otherwise stated, from this single solution to the complex eigenvector/eigenvalue problem, we can generate infinite other solutions by multiplying by any complex phase. We have shown:
+$$\begin{bmatrix}1 & 1+i\\1-i & 2\end{bmatrix}\begin{bmatrix}-1-i\\1\end{bmatrix}=\begin{bmatrix}-1-i\\1\end{bmatrix}3$$
+Introducing a phase multiplication, we have,
+$$\begin{bmatrix}1 & 1+i\\1-i & 2\end{bmatrix}\begin{bmatrix}-1-i\\1\end{bmatrix}e^{i\theta}=\begin{bmatrix}-1-i\\1\end{bmatrix}3e^{i\theta}$$
+Since we have commutativity in the complex numbers,
+$$\begin{bmatrix}1 & 1+i\\1-i & 2\end{bmatrix}e^{i\theta}\begin{bmatrix}-1-i\\1\end{bmatrix}=\begin{bmatrix}-1-i\\1\end{bmatrix}3e^{i\theta}$$
+We observe this result holds true for any phase rotation $\theta$. For example, consider a phase rotation by $\frac{\pi}{4}$,
+$$\begin{bmatrix}1 & 1+i\\1-i & 2\end{bmatrix}e^{i\frac{\pi}{4}}\begin{bmatrix}-1-i\\1\end{bmatrix}=\begin{bmatrix}-1-i\\1\end{bmatrix}3e^{i\frac{\pi}{4}}$$
+$$\Rightarrow\begin{bmatrix}1+i & 2i\\2 & 2+2i\end{bmatrix}\begin{bmatrix}-1-i\\1\end{bmatrix}=\begin{bmatrix}-1-i\\1\end{bmatrix}(3+3i)$$
+In summary, we can think of a complex eigenvector/eigenvalue solution, not as a single solution, but an infinite set of solutions that includes all possible basis changes. It is important to note that when considering higher dimensional systems, this result will not universally apply as commutativity will be no longer guaranteed; but will have use in further generation of solutions.
+
+%-------------------SECTION 6-----------------
+\section{Eigenvalues and Eigenvectors of 2x2 Quaternionic Matrices}
+To continue building up to the octonionic eigenvalue/eigenvector problem, we will first explore a quaternionic 2x2 matrix example. Introducing additional dimensions beyond the complex plane complicates the process of solving for eigenvalues and eigenvectors as the number of multiplications between these higher dimensional numbers grows by many orders of magnitude for each additional dimension. Here we will introduce a critical tool in simplifying this process known as the \emph{Hermitian matrix}. A Hermitian matrix is defined as a matrix that is equal to its conjugate transpose, denoted $M=M^{*}$. This simplification of complexity in the process of finding eigenvalues and eigenvectors for a Hermitian matrix is a direct result of the following:
+
+\begin{theorem*}
+If $M$ is a Hermitian matrix, then the eigenvalues of $M$ are real.
+\end{theorem*}
+\begin{proof}
+Let $M$ be a Hermitian matrix, that is $M=M^{*}$. Let $\vec{v}$ and $\lambda$ be eigenvectors and (right) eigenvalues, respectively.
+$$M\vec{v}=\vec{v}\lambda$$
+$$(M\vec{v})^*=(\vec{v}\lambda)^*$$
+$$\vec{v}^*M^*=\lambda^*\vec{v}^*$$
+$$\vec{v}^*M^*\vec{v}=\lambda^*\vec{v}^*\vec{v}$$
+Since $M=M^*$,
+$$\vec{v}^*M\vec{v}=\lambda^*\vec{v}^*\vec{v}$$
+Since $\lambda$ is an eigenvalue of $M$,
+$$\vec{v}^*\lambda\vec{v}=\lambda^*\vec{v}^*\vec{v}$$
+$$\lambda\vec{v}^*\vec{v}=\lambda^*\vec{v}^*\vec{v}$$
+Since $\vec{v}^*\vec{v}$ is non-zero (definition of eigenvector),
+$$\lambda = \lambda^*$$
+Therefore, since $\lambda$ is equivalent to its conjugate, $\lambda$ is real.
+\end{proof}
+\noindent Using this property let us choose a 2x2 quaternionic Hermitian matrix to discover eigenvalue and eigenvector solutions:
+$$\begin{bmatrix}1 & i-j\\-i+j & -1\end{bmatrix}\vec{v}=\vec{v}\lambda$$
+
+$$det\begin{bmatrix}1-\lambda & i-j\\-i+j & -1-\lambda\end{bmatrix} = (1-\lambda)(-1-\lambda)-(-i+j)(i-j) = \lambda^2-1-(1+k-k+1) = \lambda^2-3 = 0$$
+We arrive at eigenvalues $\lambda=\pm\sqrt{3}$. Solving for eigenvectors,
+
+&\begin{align*}
+&\begin{bmatrix}1 & i-j\\-i+j & -1\end{bmatrix}\vec{v}_1     = \sqrt{3} \vec{v}_1 & \hspace{1mm} &\begin{bmatrix}1 & i-j\\-i+j & -1\end{bmatrix} \vec{v}_2    = -\sqrt{3}\vec{v}_2 \\
+&\begin{bmatrix}1-\sqrt{3} & i-j\\-i+j & -1-\sqrt{3}\end{bmatrix}\vec{v}_1     = 0 & \hspace{1mm} &\begin{bmatrix}1+\sqrt{3} & i-j\\-i+j & -1+\sqrt{3}\end{bmatrix} \vec{v}_2    = 0\\
+& \hspace{6mm} \vec{v}_1            =\begin{bmatrix}i-j\\1-\sqrt{3}\end{bmatrix}           & \hspace{1mm} &\hspace{6mm} \vec{v}_2    =\begin{bmatrix}i-j\\1+\sqrt{3}\end{bmatrix}
+\end{align*}
+Now that we have summarized a solution to the quaternionic eigenvalue/eigenvector problem, let us attempt to extend the problem into the octonions. A first instinct to create a 2x2 octonionic matrix might be to fill the entries of the matrix such that more than four of our eight total dimensions are represented; thus, forcing the structure to be pushed passed the quaternions and into the octonions. Let's choose an example that satisfies this proposition, while also incorporating our previously defined Hermitian property to simplify some complexity:
+
+$$
+\begin{bmatrix}
+1+l & i+il\\
+j+jl & k+kl
+\end{bmatrix}
+$$
+Upon first observation, we may naively think that the entries of this matrix we have chosen are defined by combinations of some amount of each of our eight octonionic dimensions; that is, a real dimension and seven complex dimensions ($i,j,k,l,il,jl,kl$), as each of these are somewhere represented in the matrix. We may think that surely we have pushed the problem passed the quaternions, creating a necessity for an octonionic solution. Recall in our introduction of octonionic multiplication it was noted that there exists many quaternionic sub-algebras of the octonionic algebra. All numbers contained in these quaternionic sub-algebras can be represented using some multiple of each of the real dimension and three complex dimensions, for example, $1,i,j,$ and $k$. Consider the following equality of our attempt to extend to the octonions:
+
+$$
+\begin{bmatrix}1+l & i+il\\j+jl & k+kl\end{bmatrix}
+=
+\begin{bmatrix}1 & i\\j & k\end{bmatrix}(1+l)
+=
+\begin{bmatrix}1 & i\\j & k\end{bmatrix}e^{l\frac{\pi}{4}}
+$$
+It is shown that our chosen matrix that seemed to represent an octonionic structure is simply a 45 degree phase rotation of a quaternionic sub-algebra towards the $l$-direction. This is simply a \emph{change of basis} of a quaternionic space, of which is maximally represented by only four dimensions. Otherwise stated, we have not created a necessity for an octonionic solution, we have only redefined the basis of a quaternionic algebra. In fact, this will be true for any 2x2 matrix we may choose, as a structure with only four entries must include, at most, four dimensions. From this, we recognize the necessity of extending our ideas to a larger matrix in order free us from this limitation and ultimately realize a solution to the octonionic eigenvector/eigenvalue problem. For our purposes, we will consider 3x3 matrices.
+
+%--------------------SECTION 7--------------------
+\section{The Octonionic Eigenvalue/Eigenvector Problem}
+It has be determined that to reach an octonionic solution we must extend our ideas to 3x3 matrices. For sake of understanding the complexity of the problem before any specific constructions, let us view the 3x3 octonionic eigenvector/eigenvalue problem, in general:\newline \newline
+Let $O_n$ be a general octonion of the form:   $x_0+x_1i+x_2j+x_3k+x_4l+x_5il+x_6jl+x_7kl$
+$$
+\begin{bmatrix}
+O_1 & O_2 & O_3\\
+O_4 & O_5 & O_6\\
+O_7 & O_8 & O_9
+\end{bmatrix}
+\begin{bmatrix}
+O_{10}\\
+O_{11}\\
+O_{12}
+\end{bmatrix}=\begin{bmatrix}
+O_{10}\\
+O_{11}\\
+O_{12}
+\end{bmatrix}\cdot O_{13}
+$$
+When we represent the problem in general, the huge complexity of the problem in choosing thirteen octonions each containing eight degrees of freedom becomes apparent. To mitigate this complexity, we will use ideas from our build up to the octonionic problem to construct matrices in a way that allows much simpler, algebraic solutions. Since we have shown a huge simplification of complexity in the 2x2 quaternionic problem by introducing the idea of Hermitian Matrices, we will begin our construction with a 2x2 Hermitian matrix. We will then use the remaining entries of the 3x3 matrix to introduce all of the remaining quaternionic sub-algebras, while maintaining a level of simplicity that allows for an algebraic solution. We will construct this Hermitian matrix from a complex vector $\vec{p}$ by multiplying it by its conjugate transpose:
+$$\vec{p}\hspace{1mm}\vec{p}^{*} = \begin{bmatrix}1\\-l\end{bmatrix}\begin{bmatrix}1 & l\end{bmatrix} = \begin{bmatrix}1 & l\\-l & 1\end{bmatrix}$$
+To build further structure, let's fill the first two entries of our arbitrary eigenvector with an eigenvector of the previously constructed Hermitian matrix. For now, let us fill the rest of the entries of the matrix as arbitrary multidimensional numbers.
+$$
+\begin{bmatrix}
+1 & l & u_1\\
+-l & 1 & u_2\\
+s_1 & s_2 & \eta
+\end{bmatrix}
+\begin{bmatrix}
+1\\
+l\\
+w
+\end{bmatrix}
+=
+\begin{bmatrix}
+1\\
+l\\
+w
+\end{bmatrix}\lambda
+$$
+Let us matrix multiply our equation to observe and notice the careful scaling of the chosen eigenvector.
+$$
+\begin{bmatrix}
+1-1+u_1w\\
+-l+l+u_2w\\
+s_1u_1+s_2u_2+\eta w
+\end{bmatrix}
+=
+\begin{bmatrix}
+u_1w\\
+u_2w\\
+s_1+s_2l+\eta w
+\end{bmatrix}
+=
+\begin{bmatrix}
+1\\
+l\\
+w
+\end{bmatrix}\lambda
+$$
+This cancellation in the first two terms of our matrix multiplication allows a simplification that leads us closer to the ultimate goal of factoring out an eigenvalue that satisfies the equation. In order to achieve this, we will let our terms $s_1$ and $s_2$ be conjugates of our $u$ terms, bringing us closer to a simple algebraic solution.
+$$
+\begin{bmatrix}
+1 & l & u_1\\
+-l & 1 & u_2\\
+u_1^* & u_2^* & \eta
+\end{bmatrix}
+\begin{bmatrix}
+1\\
+l\\
+w
+\end{bmatrix}=\begin{bmatrix}
+1\\
+l\\
+w
+\end{bmatrix}\lambda
+$$
+We have constructed our matrix in a way that simplifies a bit of the previous structure, though currently our only complex direction is $l$. Let us introduce other complex directions in a way that guarantees a truly octonionic matrix. Recall our multiplication diagram and our discussion of quaternionic sub-algebras of the octonionic multiplication structure. We will attempt to introduce complex directions in our $w$ term and one of our four $u$ terms in such a way that the multiplications do not lie on a single quaternionic sub-algebra. For example, let us choose $w$ to be the top of the multiplication diagram, the $kl$ direction, and let us choose our $u_1$ term to include the $j$ direction, on the left edge of the diagram. It is apparent that these three directions, $l,kl$ and $j$, do not form a quaternionic sub-algebra; and thus, if we can find a solution, these multiplications will necessarily lie in an octonionic space. Updating our current entries as described:
+$$
+\begin{bmatrix}
+1 & l & j\\
+-l & 1 & u_2\\
+-j & u_2^* & \eta
+\end{bmatrix}
+\begin{bmatrix}
+1\\
+l\\
+kl
+\end{bmatrix}=\begin{bmatrix}
+1\\
+l\\
+kl
+\end{bmatrix}\lambda
+$$
+From this, some easily solvable, single-variable equations are formed:
+$$j\cdot kl = \lambda \hspace{3mm} \Rightarrow \hspace{3mm} \lambda = -il$$
+$$u_2 \cdot kl = l \cdot (-il) \hspace{3mm} \Rightarrow \hspace{3mm} u_2 = jl$$
+$$-j - jl\cdot l + \eta \cdot kl = kl \cdot (-il) \hspace{3mm} \Rightarrow \hspace{3mm} \eta = il$$
+Therefore, we have arrived at a solution to the octonionic eigenvector/eigenvalue problem:
+$$
+\begin{bmatrix}
+1 & l & j\\
+-l & 1 & jl\\
+-j & -jl & il
+\end{bmatrix}
+\begin{bmatrix}
+1\\
+l\\
+kl
+\end{bmatrix}=\begin{bmatrix}
+1\\
+l\\
+kl
+\end{bmatrix}\cdot (-il)
+$$
+Recall from our example solution to the complex eigenvalue/eigenvector problem, we were able to generate a set of solutions from a single solution by introducing a phase multiplication as a change of basis. We will attempt to introduce this concept to our octonionic solution, while also bearing in mind the differences in multiplicative properties between complex and octonionic numbers. We recognize that our eigenvector lies within a quaternionic sub-algebra, while our eigenvalue lies within a perpendicular sub-algebra. By carefully choosing a phase shift and minding our multiplicative properties, we can very simply arrive at equivalent, octonionic solutions:
+$$
+\begin{bmatrix}
+1 & l & j\\
+-l & 1 & jl\\
+-j & -jl & il
+\end{bmatrix}
+\begin{bmatrix}
+1\\
+l\\
+kl
+\end{bmatrix} \cdot l=\begin{bmatrix}
+1\\
+l\\
+kl
+\end{bmatrix} \cdot l \cdot (-il)
+$$
+$$
+\Rightarrow
+\begin{bmatrix}
+1 & l & j\\
+-l & 1 & jl\\
+-j & -jl & il
+\end{bmatrix}
+\begin{bmatrix}
+l\\
+-1\\
+-k
+\end{bmatrix}=\begin{bmatrix}
+l\\
+-1\\
+-k
+\end{bmatrix} \cdot (-il)
+$$
+Similarly,
+$$
+\begin{bmatrix}
+1 & l & j\\
+-l & 1 & jl\\
+-j & -jl & il
+\end{bmatrix}
+\begin{bmatrix}
+1\\
+l\\
+kl
+\end{bmatrix} \cdot kl=\begin{bmatrix}
+1\\
+l\\
+kl
+\end{bmatrix} \cdot kl \cdot (il)
+$$
+$$
+\Rightarrow
+\begin{bmatrix}
+1 & l & j\\
+-l & 1 & jl\\
+-j & -jl & il
+\end{bmatrix}
+\begin{bmatrix}
+kl\\
+k\\
+-1
+\end{bmatrix}=\begin{bmatrix}
+kl\\
+k\\
+-1
+\end{bmatrix} \cdot il
+$$
+%-----------------------SECTION 8-----------------------
+\section{Conclusion}
+In summary, we have developed a method of construction of octonionic matrices of which eigenvalue/eigenvector solutions can be achieved. These constructions have relied heavily on key ideas such as Hermitian properties, phase shift basis changes, relationships between different sub-algebraic structures, and general multiplicative properties of each successive 2n-dimensional number system as built from the real number line through the Cayley-Dickson process. At first glance, these constructions defy the exponential explosion of degrees of freedom as we introduce higher dimensional numbers into the problem of finding eigenvalues and eigenvectors as a general solution. Though, it is important to note that these constructions are a great simplification, as necessary, to a much larger set of problems. Rather than a solution to the near infinitely complex octonionic eigenvector/eigenvalue problem, the constructions discovered here are better thought of as a springboard into a much larger set of new ideas and properties that may have applications in fields that rely on linear transformations between higher dimensional numbers.
+\end{document}
